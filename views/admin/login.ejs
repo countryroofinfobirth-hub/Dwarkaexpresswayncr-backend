@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Login - Dwarka Expressway</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="login-container">
+
+<div class="login-box">
+  <div class="text-center mb-8">
+    <h1 class="text-3xl font-bold" style="color: #111111;">Dwarka Admin</h1>
+    <p class="text-gray-600 text-sm mt-2">Login</p>
+  </div>
+
+  <% if (typeof error !== "undefined" && error) { %>
+    <div class="login-error">
+      <strong>Error:</strong> <%= error %>
+    </div>
+  <% } %>
+
+  <% if (typeof warning !== "undefined" && warning) { %>
+    <div class="login-warning">
+      <%= warning %>
+    </div>
+  <% } %>
+
+  <form method="POST" action="/admin/login" autocomplete="off">
+    <div class="form-group">
+      <label class="form-label">Username</label>
+      <input 
+        type="text"
+        name="username" 
+        placeholder="Enter your username"
+        class="form-input"
+        required
+        autocomplete="username"
+      />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <input 
+        type="password" 
+        name="password" 
+        placeholder="Enter your password"
+        class="form-input"
+        required
+        autocomplete="current-password"
+      />
+    </div>
+
+    <button 
+      type="submit"
+      class="btn btn-primary w-full"
+    >
+      Login
+    </button>
+  </form>
+
+</div>
+
+</body>
+</html>

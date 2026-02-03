@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>All Projects - Dwarka Expressway</title>
+    <meta name="description" content="Explore our premium real estate projects along Dwarka Expressway">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header class="bg-primary text-white shadow-lg">
+    <div class="container flex-between py-4">
+        <div>
+            <h1 class="text-3xl font-bold">Dwarka Expressway</h1>
+            <p class="text-sm" style="opacity: 0.9;">Premium Real Estate Projects</p>
+        </div>
+        <nav class="flex gap-6" style="align-items: center;">
+            <a href="/" style="color: white; text-decoration: none;">Home</a>
+            <a href="/projects" style="color: white; text-decoration: none;">Projects</a>
+            <a href="#" style="color: white; text-decoration: none;">Contact</a>
+        </nav>
+    </div>
+</header>
+
+<!-- HERO -->
+<section style="background: linear-gradient(135deg, rgba(241, 66, 1, 0.8) 0%, rgba(17, 17, 17, 0.8) 100%); color: white; padding: 60px 20px; text-align: center;">
+    <div class="container">
+        <h2 class="text-4xl font-bold mb-4">Our Projects</h2>
+        <p class="text-lg" style="opacity: 0.9;">Discover premium residential and commercial properties</p>
+    </div>
+</section>
+
+<!-- PROJECTS GRID -->
+<main class="container py-12">
+    <% if (projects.length === 0) { %>
+        <div class="card">
+            <p class="text-center text-gray-600 py-12">No projects found. Please check back soon!</p>
+        </div>
+    <% } else { %>
+        <div class="projects-grid">
+            <% projects.forEach(project => { %>
+                <div class="project-card">
+                    <% if (project.hero && project.hero.image) { %>
+                        <img src="<%= project.hero.image %>" alt="<%= project.name %> - hero image" class="project-card-image">
+                    <% } else { %>
+                        <div class="project-card-image" style="background-color: #f3f4f6; display: flex; align-items: center; justify-content: center;">
+                            <p class="text-gray-500">No image</p>
+                        </div>
+                    <% } %>
+                    
+                    <div class="project-card-content">
+                        <h3><%= project.name %></h3>
+                        <p><strong><%= project.location %></strong></p>
+                        <p><%= project.about?.content?.substring(0, 80) + '...' || 'Premium property' %></p>
+                        
+                        <div style="margin: 12px 0; display: flex; justify-content: space-between; font-size: 12px; color: #6b7280;">
+                            <span><strong>Price:</strong> <%= project.price || 'Contact' %></span>
+                            <span><strong>Size:</strong> <%= project.landSize || 'N/A' %></span>
+                        </div>
+                        
+                        <div class="project-card-footer">
+                            <a href="/projects/view/<%= project.slug %>" class="btn btn-primary btn-sm">View Details</a>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    <% } %>
+</main>
+
+<!-- FOOTER -->
+<footer style="background-color: #1f2937; color: white; padding: 40px 20px; margin-top: 60px;">
+    <div class="container">
+        <div class="grid grid-3 gap-8 mb-8">
+            <div>
+                <h3 class="font-bold mb-4">Dwarka Expressway</h3>
+                <p style="color: #d1d5db;">Premium real estate projects along Dwarka Expressway.</p>
+            </div>
+            <div>
+                <h3 class="font-bold mb-4">Quick Links</h3>
+                <ul style="list-style: none;">
+                    <li class="mb-2"><a href="/" style="color: var(--primary); text-decoration: none;">Home</a></li>
+                    <li class="mb-2"><a href="/projects" style="color: var(--primary); text-decoration: none;">Projects</a></li>
+                    <li><a href="#" style="color: var(--primary); text-decoration: none;">Contact</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="font-bold mb-4">Contact</h3>
+                <p style="color: #d1d5db; margin-bottom: 8px;">Phone: +91-XXXXXXXXXX</p>
+                <p style="color: #d1d5db;">Email: info@dwarkaexpressway.com</p>
+            </div>
+        </div>
+        <div style="border-top: 1px solid #374151; padding-top: 20px; text-align: center; color: #9ca3af;">
+            <p>&copy; 2024 Dwarka Expressway. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

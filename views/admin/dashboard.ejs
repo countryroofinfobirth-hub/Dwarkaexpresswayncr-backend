@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="admin-page">
+
+<!-- HEADER -->
+<header class="flex-between px-6 py-4 bg-white shadow">
+  <div>
+    <h1 class="text-2xl font-bold">Admin Dashboard</h1>
+  </div>
+
+  <div class="flex gap-3">
+    <a href="/admin/add-project" class="btn btn-primary">+ Add Project</a>
+    <a href="/admin/logout" class="btn btn-gray">Logout</a>
+  </div>
+</header>
+
+<div class="admin-container">
+  <div class="mt-6">
+    <h2 class="text-xl font-semibold mb-4">Projects</h2>
+    
+    <% if (projects.length === 0) { %>
+      <div class="card">
+        <p class="text-gray-600">No projects found. <a href="/admin/add-project" class="text-primary font-semibold">Create one now</a></p>
+      </div>
+    <% } else { %>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Location</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% projects.forEach(project => { %>
+            <tr>
+              <td><strong><%= project.name %></strong></td>
+              <td><%= project.location %></td>
+              <td><%= project.price %></td>
+              <td>
+                <span style="background-color: #dbeafe; color: #1e40af; padding: 4px 8px; border-radius: 4px; font-size: 12px;">
+                  <%= project.status || 'Active' %>
+                </span>
+              </td>
+              <td>
+                <div class="table-actions">
+                  <a href="/admin/edit/<%= project._id %>" class="btn btn-blue btn-sm">Edit</a>
+                  <a href="/admin/delete/<%= project._id %>" class="btn btn-red btn-sm" onclick="return confirm('Are you sure?')">Delete</a>
+                </div>
+              </td>
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    <% } %>
+  </div>
+</div>
+
+</body>
+</html>
