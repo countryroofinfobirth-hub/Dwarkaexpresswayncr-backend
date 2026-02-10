@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Add Project</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="admin-page">
+  
+<header class="flex-between px-6 py-4 bg-white shadow">
+  <h1 class="text-2xl font-bold">Add Project</h1>
+  <a href="/admin" class="btn btn-gray">Back</a>
+</header>
+
+<div class="admin-container">
+  <div class="card mt-6" style="max-width: 800px;">
+    <form method="POST">
+      
+      <!-- Hero Section -->
+      <div class="card-header">
+        <h2>Hero Section</h2>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Hero Heading</label>
+        <input type="text" name="heroHeading" class="form-input" placeholder="e.g., Premium Luxury Villas" required />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Hero Subtext</label>
+        <input type="text" name="heroSubText" class="form-input" placeholder="e.g., Dwarka Expressway, Sector 15" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Hero Image URL</label>
+        <input type="url" name="heroImage" class="form-input preview-input" data-purpose="hero" placeholder="https://..." value="<%= typeof formData !== 'undefined' ? formData.heroImage || '' : '' %>" />
+        <img src="<%= typeof formData !== 'undefined' && formData.heroImage ? formData.heroImage : '' %>" alt="<%= typeof formData !== 'undefined' && formData.name ? formData.name + ' - hero image' : 'Hero image' %>" class="image-preview hero-preview" style="max-width: 200px; margin-top: 8px; border-radius: 4px; border: 1px solid #ccc; <%= typeof formData !== 'undefined' && formData.heroImage ? '' : 'display: none;' %>" />
+      </div>
+
+      <div class="grid grid-2">
+        <div class="form-group">
+          <label class="form-label">RERA Registration</label>
+          <input type="text" name="heroRera" class="form-input" placeholder="RERA ID" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Possession</label>
+          <input type="text" name="heroPossession" class="form-input" placeholder="e.g., Q4 2025" />
+        </div>
+      </div>
+
+      <!-- Project Info -->
+      <div class="card-header mt-6">
+        <h2>Project Info</h2>
+      </div>
+
+      <% if (typeof error !== 'undefined' && error) { %>
+        <div class="alert alert-error">
+          <%= error %>
+        </div>
+      <% } %>
+
+      <!-- Retain previously entered values -->
+      <div class="form-group">
+        <label class="form-label">Project Name *</label>
+        <input id="projectName" type="text" name="name" class="form-input" placeholder="Project name" value="<%= typeof formData !== 'undefined' ? formData.name : '' %>" required />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Location *</label>
+        <input type="text" name="location" class="form-input" placeholder="Location" value="<%= typeof formData !== 'undefined' ? formData.location : '' %>" required />
+      </div>
+
+      <div class="grid grid-2">
+        <div class="form-group">
+          <label class="form-label">Price</label>
+          <input type="text" name="price" class="form-input" placeholder="Price" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Land Size</label>
+          <input type="text" name="landSize" class="form-input" placeholder="e.g., 2.5 acres" />
+        </div>
+      </div>
+
+      <!-- About Section -->
+      <div class="card-header mt-6">
+        <h2>About</h2>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">About Title</label>
+        <input type="text" name="aboutTitle" class="form-input" placeholder="About this project" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">About Content</label>
+        <textarea name="aboutContent" class="form-textarea" placeholder="Project description"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">About Image URL</label>
+        <input type="url" name="aboutImage" class="form-input preview-input" data-purpose="about" placeholder="https://..." value="<%= typeof formData !== 'undefined' ? formData.aboutImage || '' : '' %>" />
+        <img src="<%= typeof formData !== 'undefined' && formData.aboutImage ? formData.aboutImage : '' %>" alt="<%= typeof formData !== 'undefined' && formData.aboutTitle ? formData.aboutTitle : (typeof formData !== 'undefined' && formData.name ? formData.name + ' - about image' : 'About image') %>" class="image-preview about-preview" style="max-width: 200px; margin-top: 8px; border-radius: 4px; border: 1px solid #ccc; <%= typeof formData !== 'undefined' && formData.aboutImage ? '' : 'display: none;' %>" />
+      </div>
+
+      <!-- Gallery -->
+      <div class="card-header mt-6">
+        <h2>Gallery Images</h2>
+      </div>
+
+      <div id="galleryContainer">
+        <div class="form-group" data-index="1">
+          <label class="form-label">Gallery Image URL</label>
+          <div class="flex gap-2">
+            <input type="url" name="gallery[]" class="form-input gallery-url" data-index="1" placeholder="https://..." value="<%= typeof formData !== 'undefined' && formData.gallery && formData.gallery.length ? formData.gallery[0] : '' %>" />
+            <button type="button" class="btn btn-red btn-sm" onclick="removeGallery(this)">Remove</button>
+          </div>
+          <img src="<%= typeof formData !== 'undefined' && formData.gallery && formData.gallery.length ? formData.gallery[0] : '' %>" alt="<%= typeof formData !== 'undefined' && formData.name ? formData.name + ' - gallery image 1' : 'Gallery image 1' %>" class="gallery-preview" style="max-width: 100px; margin-top: 8px; border-radius: 4px; border: 1px solid #ccc; <%= typeof formData !== 'undefined' && formData.gallery && formData.gallery.length ? '' : 'display: none;' %>" />
+        </div>
+      </div>
+
+      <button type="button" class="btn btn-gray mt-2" onclick="addGallery()">+ Add Image</button>
+
+      <!-- Amenities -->
+      <div class="card-header mt-6">
+        <h2>Amenities</h2>
+      </div>
+
+      <div id="amenitiesContainer">
+        <div class="form-group">
+          <label class="form-label">Amenity</label>
+          <div class="flex gap-2">
+            <input type="text" name="amenities[]" class="form-input" placeholder="e.g., Swimming Pool" />
+            <button type="button" class="btn btn-red btn-sm" onclick="removeAmenity(this)">Remove</button>
+          </div>
+        </div>
+      </div>
+
+      <button type="button" class="btn btn-gray mt-2" onclick="addAmenity()">+ Add Amenity</button>
+
+      <!-- FAQs -->
+      <div class="card-header mt-6">
+        <h2>FAQs</h2>
+      </div>
+
+      <div id="faqContainer">
+        <div class="form-group">
+          <label class="form-label">Question</label>
+          <input type="text" name="faqQuestion[]" class="form-input" placeholder="Your question" />
+          
+          <label class="form-label mt-2">Answer</label>
+          <textarea name="faqAnswer[]" class="form-textarea" placeholder="Your answer"></textarea>
+          
+          <button type="button" class="btn btn-red btn-sm mt-2" onclick="removeFaq(this)">Remove</button>
+        </div>
+      </div>
+
+      <button type="button" class="btn btn-gray mt-2" onclick="addFaq()">+ Add FAQ</button>
+
+      <!-- Connectivity -->
+      <div class="card-header mt-6">
+        <h2>Connectivity</h2>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Connectivity Map Image URL</label>
+        <input type="url" name="connectivityMap" class="form-input preview-input" data-purpose="connectivity map" placeholder="https://..." value="<%= typeof formData !== 'undefined' ? formData.connectivityMap : '' %>" />
+        <img src="<%= typeof formData !== 'undefined' && formData.connectivityMap ? formData.connectivityMap : '' %>" alt="<%= typeof formData !== 'undefined' && formData.name ? formData.name + ' - connectivity map' : 'Connectivity map' %>" class="image-preview connectivity-preview" style="max-width: 200px; margin-top: 8px; border-radius: 4px; border: 1px solid #ccc; <%= typeof formData !== 'undefined' && formData.connectivityMap ? '' : 'display: none;' %>" />
+        <p class="form-note">Add an image URL showing the connectivity map (e.g., nearby roads and transport links).</p>
+      </div>
+
+      <!-- SEO -->
+      <div class="card-header mt-6">
+        <h2>SEO</h2>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Meta Title</label>
+        <input type="text" name="metaTitle" class="form-input" placeholder="SEO Title" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Meta Description</label>
+        <textarea name="metaDescription" class="form-textarea" placeholder="SEO Description"></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">OG Image URL</label>
+        <input type="url" name="ogImage" class="form-input preview-input" data-purpose="og" placeholder="https://..." value="<%= typeof formData !== 'undefined' ? formData.ogImage || '' : '' %>" />
+        <img src="<%= typeof formData !== 'undefined' && formData.ogImage ? formData.ogImage : '' %>" alt="<%= typeof formData !== 'undefined' && formData.name ? formData.name + ' - og image' : 'OG image' %>" class="image-preview og-preview" style="max-width: 200px; margin-top: 8px; border-radius: 4px; border: 1px solid #ccc; <%= typeof formData !== 'undefined' && formData.ogImage ? '' : 'display: none;' %>" />
+      </div>
+
+      <!-- Submit -->
+      <div class="flex gap-3 mt-6">
+        <button type="submit" class="btn btn-primary">Create Project</button>
+        <a href="/admin" class="btn btn-gray">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+let galleryCount = 1;
+
+function updatePreviewForInput(input) {
+  const idx = input.getAttribute('data-index');
+  const preview = input.closest('.form-group').querySelector('.gallery-preview');
+  const projectName = document.getElementById('projectName')?.value || 'Gallery image';
+  if (input.value && preview) {
+    preview.src = input.value;
+    preview.alt = projectName + ' - gallery image ' + idx;
+    preview.style.display = 'block';
+  } else if (preview) {
+    preview.src = '';
+    preview.alt = 'Gallery image ' + idx;
+    preview.style.display = 'none';
+  }
+}
+
+function addGallery() {
+  galleryCount += 1;
+  const container = document.getElementById('galleryContainer');
+  const div = document.createElement('div');
+  div.className = 'form-group';
+  div.setAttribute('data-index', galleryCount);
+  div.innerHTML = `
+    <label class="form-label">Gallery Image URL</label>
+    <div class="flex gap-2">
+      <input type="url" name="gallery[]" class="form-input gallery-url" data-index="${galleryCount}" placeholder="https://..." />
+      <button type="button" class="btn btn-red btn-sm" onclick="removeGallery(this)">Remove</button>
+    </div>
+    <img src="" alt="Gallery image ${galleryCount}" class="gallery-preview" style="max-width: 100px; margin-top: 8px; border-radius: 4px; border: 1px solid #ccc; display: none;" />
+  `;
+  container.appendChild(div);
+
+  const input = div.querySelector('.gallery-url');
+  input.addEventListener('input', () => updatePreviewForInput(input));
+}
+
+// Initialize galleryCount and attach listeners for existing inputs
+document.addEventListener('DOMContentLoaded', () => {
+  const existing = document.querySelectorAll('.gallery-url');
+  galleryCount = Math.max(1, existing.length);
+  existing.forEach(input => {
+    input.addEventListener('input', () => updatePreviewForInput(input));
+    // If there's an initial value present (e.g., from formData), update preview
+    if (input.value) updatePreviewForInput(input);
+  });
+
+  // Initialize other image preview inputs (hero, about, connectivity, og)
+  const previewInputs = document.querySelectorAll('.preview-input');
+  previewInputs.forEach(input => {
+    const preview = input.closest('.form-group').querySelector('.image-preview');
+    const purpose = input.dataset.purpose || 'image';
+    const update = () => {
+      const projectName = document.getElementById('projectName')?.value || '';
+      if (input.value && preview) {
+        preview.src = input.value;
+        preview.alt = (projectName ? projectName + ' - ' : '') + purpose + ' image';
+        preview.style.display = 'block';
+      } else if (preview) {
+        preview.src = '';
+        preview.alt = purpose + ' image';
+        preview.style.display = 'none';
+      }
+    };
+    input.addEventListener('input', update);
+    if (input.value) update();
+  });
+
+  // Update previews when project name changes so alt text reflects it
+  const nameInput = document.getElementById('projectName');
+  if (nameInput) {
+    nameInput.addEventListener('input', () => {
+      document.querySelectorAll('.gallery-url').forEach(input => updatePreviewForInput(input));
+      document.querySelectorAll('.image-preview').forEach(preview => {
+        const group = preview.closest('.form-group');
+        const input = group.querySelector('.preview-input');
+        const purpose = input ? (input.dataset.purpose || 'image') : 'image';
+        const projectName = nameInput.value || '';
+        if (preview.src) {
+          preview.alt = (projectName ? projectName + ' - ' : '') + purpose + ' image';
+        } else {
+          preview.alt = purpose + ' image';
+        }
+      });
+    });
+  }
+} );
+
+function removeGallery(btn) {
+  btn.closest('.form-group').remove();
+}
+
+function addAmenity() {
+  const container = document.getElementById('amenitiesContainer');
+  const div = document.createElement('div');
+  div.className = 'form-group';
+  div.innerHTML = `
+    <label class="form-label">Amenity</label>
+    <div class="flex gap-2">
+      <input type="text" name="amenities[]" class="form-input" placeholder="e.g., Swimming Pool" />
+      <button type="button" class="btn btn-red btn-sm" onclick="removeAmenity(this)">Remove</button>
+    </div>
+  `;
+  container.appendChild(div);
+}
+
+function removeAmenity(btn) {
+  btn.closest('.form-group').remove();
+}
+
+function addFaq() {
+  const container = document.getElementById('faqContainer');
+  const div = document.createElement('div');
+  div.className = 'form-group';
+  div.innerHTML = `
+    <label class="form-label">Question</label>
+    <input type="text" name="faqQuestion[]" class="form-input" placeholder="Your question" />
+    
+    <label class="form-label mt-2">Answer</label>
+    <textarea name="faqAnswer[]" class="form-textarea" placeholder="Your answer"></textarea>
+    
+    <button type="button" class="btn btn-red btn-sm mt-2" onclick="removeFaq(this)">Remove</button>
+  `;
+  container.appendChild(div);
+}
+
+function removeFaq(btn) {
+  btn.closest('.form-group').remove();
+}
+</script>
+
+</body>
+</html>

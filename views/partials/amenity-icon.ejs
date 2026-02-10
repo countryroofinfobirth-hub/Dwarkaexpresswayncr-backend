@@ -1,0 +1,42 @@
+<%
+// Reusable helper: returns a Font Awesome (free) class string for an amenity label
+function amenityIcon(amenity) {
+    var a = (amenity || '').toString().toLowerCase();
+    var map = [
+        {k: ['gym','fitness','fitness center','fitness-centre','fitnesscentre'], v: 'fa-solid fa-dumbbell'},
+        {k: ['swim','pool','swimming'], v: 'fa-solid fa-person-swimming'},
+        {k: ['park','garden','green','landscaped'], v: 'fa-solid fa-tree'},
+        {k: ['parking','car','vehicle','parking lot'], v: 'fa-solid fa-car'},
+        {k: ['security','guard','cctv','gated'], v: 'fa-solid fa-shield'},
+        {k: ['lift','elevator','lift lobby'], v: 'fa-solid fa-up-right-and-down-left-from-center'},
+        {k: ['club','clubhouse','community hall','club house'], v: 'fa-solid fa-users'},
+        {k: ['gymkhana','sports','sport','sports complex'], v: 'fa-solid fa-basketball'},
+        {k: ['tennis'], v: 'fa-solid fa-table-tennis-paddle-ball'},
+        {k: ['basketball'], v: 'fa-solid fa-basketball'},
+        {k: ['shopping','supermarket','store'], v: 'fa-solid fa-shop'},
+        {k: ['hospital','clinic','medical'], v: 'fa-solid fa-hospital'},
+        {k: ['school','college','education'], v: 'fa-solid fa-school'},
+        {k: ['wifi','internet','broadband'], v: 'fa-solid fa-wifi'},
+        {k: ['power','backup','generator','genset'], v: 'fa-solid fa-bolt'},
+        {k: ['cctv','surveillance'], v: 'fa-solid fa-video'},
+        {k: ['jog','jogging','track','running'], v: 'fa-solid fa-walking'},
+        {k: ['restaurant','cafe','cafeteria','food'], v: 'fa-solid fa-utensils'},
+        {k: ['spa','sauna','steam'], v: 'fa-solid fa-spa'},
+        {k: ['cinema','movie','theatre','theater'], v: 'fa-solid fa-film'},
+        {k: ['banquet','party','events'], v: 'fa-solid fa-martini-glass'},
+        {k: ['play','kids','children','playground'], v: 'fa-solid fa-child'},
+        {k: ['lake','pond','waterbody','water'], v: 'fa-solid fa-water'},
+        {k: ['terrace','balcony'], v: 'fa-solid fa-house-chimney'},
+        {k: ['garden'], v: 'fa-solid fa-seedling'},
+        {k: ['default','other'], v: 'fa-solid fa-circle-check'}
+    ];
+
+    for (var i = 0; i < map.length; i++) {
+        var keywords = map[i].k;
+        for (var j = 0; j < keywords.length; j++) {
+            if (a.indexOf(keywords[j]) !== -1) return map[i].v;
+        }
+    }
+    return 'fa-solid fa-circle-check';
+}
+%>

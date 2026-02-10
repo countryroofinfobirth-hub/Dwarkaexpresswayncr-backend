@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <% const title = project.metaTitle || (project.name ? project.name + ' - Dwarka Expressway' : 'Dwarka Expressway Project'); %>
+    <title><%= title %></title>
+
+    <% const description = project.metaDescription || (project.about && project.about.content ? project.about.content.substring(0, 160) : `Learn about ${project.name || 'this project'} on Dwarka Expressway.`); %>
+    <meta name="description" content="<%= description %>" />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="<%= title %>" />
+    <meta property="og:description" content="<%= description %>" />
+    <% if (project.ogImage) { %>
+      <meta property="og:image" content="<%= project.ogImage %>" />
+    <% } %>
+    <meta property="og:type" content="website" />
+
+    <!-- Twitter cards (optional) -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="<%= title %>" />
+    <meta name="twitter:description" content="<%= description %>" />
+    <% if (project.ogImage) { %>
+      <meta name="twitter:image" content="<%= project.ogImage %>" />
+    <% } %>
+
+    <!-- JSON-LD schema: use saved schema if present, otherwise generate -->
+    <% if (project.schema) { %>
+      <script type="application/ld+json">
+        <%- project.schema %>
+      </script>
+    <% } else { 
+         const genSchema = {
+           "@context":"https://schema.org",
+           "@type":"Product",
+           name: project.name || title,
+           description,
+           image: project.ogImage || undefined,
+           offers: project.price ? { "@type":"Offer", price: project.price } : undefined
+         };
+    %>
+      <script type="application/ld+json"><%= JSON.stringify(genSchema) %></script>
+    <% } %>
+  </head>
+  <body>
+    <h1><%= project.name %></h1>
+    <!-- ...existing code to show project details... -->
+    <p><%= project.about && project.about.content %></p>
+  </body>
+</html>

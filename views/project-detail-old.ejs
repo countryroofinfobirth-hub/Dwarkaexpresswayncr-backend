@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title><%= project.metaTitle || project.name %></title>
+    <meta name="description" content="<%= project.metaDescription || project.name %>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="<%= project.name %>">
+    <meta property="og:description" content="<%= project.metaDescription || project.name %>">
+    <% if (project.ogImage) { %>
+        <meta property="og:image" content="<%= project.ogImage %>">
+    <% } %>
+</head>
+
+<body class="flex flex-col min-h-screen bg-gray-50">
+
+    <!-- HEADER -->
+    <header class="bg-blue-600 text-white shadow-lg">
+        <div class="max-w-6xl mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-3xl font-bold">Dwarka Expressway</h1>
+                    <p class="text-blue-100 text-sm">Premium Real Estate Projects</p>
+                </div>
+                <nav class="space-x-6">
+                    <a href="/" class="hover:text-blue-200 transition">Home</a>
+                    <a href="/projects" class="hover:text-blue-200 transition">Projects</a>
+                    <a href="#" class="hover:text-blue-200 transition">Contact</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-grow max-w-6xl mx-auto w-full px-4 py-8">
+
+        <!-- HERO SECTION WITH IMAGE -->
+        <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+            <div class="grid grid-cols-2 gap-0">
+                <% if (project.hero && project.hero.image) { %>
+                    <img src="<%= project.hero.image %>" alt="<%= project.name %> - hero image" class="w-full h-96 object-cover">
+                <% } else { %>
+                    <div class="w-full h-96 bg-gray-300 flex items-center justify-center">
+                        <p class="text-gray-500">No image available</p>
+                    </div>
+                <% } %>
+                <div class="p-8 flex flex-col justify-center">
+                    <h1 class="text-4xl font-bold text-gray-800 mb-2"><%= project.hero?.heading || project.name %></h1>
+                    <p class="text-xl text-gray-600 mb-6"><%= project.hero?.subText || '' %></p>
+
+                    <!-- RERA and Possession Info -->
+                    <% if (project.hero?.rera || project.hero?.possession) { %>
+                        <div class="grid grid-cols-2 gap-4 mb-6 pb-6 border-b border-gray-300">
+                            <% if (project.hero?.rera) { %>
+                                <div>
+                                    <p class="text-sm text-gray-600 font-semibold mb-1">RERA Registration</p>
+                                    <p class="text-lg font-bold text-blue-600"><%= project.hero.rera %></p>
+                                </div>
+                            <% } %>
+                            <% if (project.hero?.possession) { %>
+                                <div>
+                                    <p class="text-sm text-gray-600 font-semibold mb-1">Possession</p>
+                                    <p class="text-lg font-bold text-gray-800"><%= project.hero.possession %></p>
+                                </div>
+                            <% } %>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </section>
+
+        <!-- BASIC INFO -->
+        <section class="bg-white rounded-lg shadow-md p-8 mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div>
+                    <p class="text-gray-600 text-sm font-semibold">LOCATION</p>
+                    <p class="text-2xl font-bold text-gray-800"><%= project.location || 'N/A' %></p>
+                </div>
+                <div>
+                    <p class="text-gray-600 text-sm font-semibold">STARTING PRICE</p>
+                    <p class="text-2xl font-bold text-blue-600">₹ <%= project.price || 'N/A' %></p>
+                </div>
+                <div>
+                    <p class="text-gray-600 text-sm font-semibold">LAND SIZE</p>
+                    <p class="text-2xl font-bold text-gray-800"><%= project.landSize || 'N/A' %></p>
+                </div>
+                <div>
+                    <p class="text-gray-600 text-sm font-semibold">PROJECT NAME</p>
+                    <p class="text-2xl font-bold text-gray-800"><%= project.name %></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT SECTION WITH IMAGE -->
+        <% if (project.about && project.about.content) { %>
+            <section class="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+                <div class="grid grid-cols-2 gap-0">
+                    <div class="p-8">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-4"><%= project.about.title || 'About Project' %></h2>
+                        <p class="text-gray-700 leading-relaxed"><%= project.about.content %></p>
+                    </div>
+                    <% if (project.about.image) { %>
+                        <img src="<%= project.about.image %>" alt="<%= project.about.title ? project.about.title : project.name + ' - about image' %>" class="w-full h-96 object-cover">
+                    <% } else { %>
+                        <div class="w-full h-96 bg-gray-300 flex items-center justify-center">
+                            <p class="text-gray-500">No image available</p>
+                        </div>
+                    <% } %>
+                </div>
+            </section>
+        <% } %>
+
+        <!-- AMENITIES SECTION -->
+        <% if (project.amenities && project.amenities.length > 0) { %>
+            <% include ../partials/amenity-icon %>
+            <section class="bg-white rounded-lg shadow-md p-8 mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Amenities</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <% project.amenities.forEach(amenity => { %>
+                        <div class="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-600 text-center">
+                            <i class="<%= amenityIcon(amenity) %>" style="font-size:18px; color:#0ea5e9; display:block; margin-bottom:8px;"></i>
+                            <p class="text-gray-700 font-medium"><%= amenity %></p>
+                        </div>
+                    <% }) %>
+                </div>
+            </section>
+        <% } %>
+
+        <!-- GALLERY SECTION -->
+        <% if (project.gallery && project.gallery.length > 0) { %>
+            <section class="bg-white rounded-lg shadow-md p-8 mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Image Gallery</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <% project.gallery.forEach((img, idx) => { %>
+                        <div class="overflow-hidden rounded-lg shadow-md hover:shadow-lg transition">
+                            <img src="<%= img %>" alt="<%= project.name %> - gallery image <%= idx + 1 %>" class="w-full h-64 object-cover hover:scale-105 transition duration-300">
+                        </div>
+                    <% }) %>
+                </div>
+            </section>
+        <% } %>
+
+        <!-- FAQs SECTION -->
+        <% if (project.faqs && project.faqs.length > 0) { %>
+            <section class="bg-white rounded-lg shadow-md p-8 mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6">Frequently Asked Questions</h2>
+                <div class="space-y-4">
+                    <% project.faqs.forEach(faq => { %>
+                        <details class="border-l-4 border-blue-600 pl-4 py-3 cursor-pointer group">
+                            <summary class="font-semibold text-gray-800 group-hover:text-blue-600 transition">
+                                <%= faq.question %>
+                            </summary>
+                            <p class="text-gray-700 mt-2"><%= faq.answer %></p>
+                        </details>
+                    <% }) %>
+                </div>
+            </section>
+        <% } %>
+
+        <!-- BACK BUTTON -->
+        <div class="mb-8">
+            <a href="/projects" class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition">
+                ← Back to Projects
+            </a>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-gray-900 text-gray-300 mt-12">
+        <div class="max-w-6xl mx-auto px-4 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <!-- Company Info -->
+                <div>
+                    <h3 class="text-white font-bold text-lg mb-4">Dwarka Expressway</h3>
+                    <p class="text-sm text-gray-400">Premium real estate projects along Dwarka Expressway. Building dreams, creating homes.</p>
+                </div>
+
+                <!-- Quick Links -->
+                <div>
+                    <h3 class="text-white font-bold text-lg mb-4">Quick Links</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/" class="hover:text-white transition">Home</a></li>
+                        <li><a href="/projects" class="hover:text-white transition">All Projects</a></li>
+                        <li><a href="#" class="hover:text-white transition">About Us</a></li>
+                        <li><a href="#" class="hover:text-white transition">Contact</a></li>
+                    </ul>
+                </div>
+
+                <!-- Contact Info -->
+                <div>
+                    <h3 class="text-white font-bold text-lg mb-4">Contact</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li>Email: <a href="mailto:info@dwarka.com" class="hover:text-white transition">info@dwarka.com</a></li>
+                        <li>Phone: <a href="tel:+919876543210" class="hover:text-white transition">+91 9876 543210</a></li>
+                        <li>Address: Delhi NCR, India</li>
+                    </ul>
+                </div>
+
+                <!-- Social Links -->
+                <div>
+                    <h3 class="text-white font-bold text-lg mb-4">Follow Us</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="hover:text-white transition">Facebook</a></li>
+                        <li><a href="#" class="hover:text-white transition">Instagram</a></li>
+                        <li><a href="#" class="hover:text-white transition">Twitter</a></li>
+                        <li><a href="#" class="hover:text-white transition">LinkedIn</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="border-t border-gray-700 pt-8 text-center text-sm text-gray-500">
+                <p>&copy; <% new Date().getFullYear() %> Dwarka Expressway. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+</body>
+
+</html>

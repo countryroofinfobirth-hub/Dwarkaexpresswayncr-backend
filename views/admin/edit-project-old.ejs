@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Edit Project</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: '#f14201',
+              dark: '#111111'
+            }
+          }
+        }
+      }
+    </script>
+  </head>
+
+  <body class="bg-gray-100 p-8">
+    <h1 class="text-2xl font-bold mb-6">Edit Project</h1>
+
+    <form
+      method="POST"
+      action="/admin/edit/<%= project._id %>"
+      class="bg-white p-6 rounded shadow space-y-6 max-w-3xl"
+    >
+      <!-- BASIC INFO -->
+      <h3 class="text-lg font-semibold">Basic Info</h3>
+
+      <input
+        id="projectName"
+        name="name"
+        value="<%= project.name %>"
+        placeholder="Project Name"
+        class="w-full border p-2 rounded"
+        required
+      />
+
+      <input
+        name="location"
+        value="<%= project.location || '' %>"
+        placeholder="Location"
+        class="w-full border p-2 rounded"
+      />
+
+      <input
+        name="price"
+        value="<%= project.price || '' %>"
+        placeholder="Price"
+        class="w-full border p-2 rounded"
+      />
+
+      <input
+        name="landSize"
+        value="<%= project.landSize || '' %>"
+        placeholder="Land Size (e.g., 5 acres, 2000 sq ft)"
+        class="w-full border p-2 rounded"
+      />
+
+      <!-- HERO -->
+      <h3 class="text-lg font-semibold mt-6">Hero Section</h3>
+
+      <input
+        name="hero[heading]"
+        value="<%= project.hero && project.hero.heading ? project.hero.heading : '' %>"
+        placeholder="Hero Heading"
+        class="w-full border p-2 rounded"
+      />
+
+      <input
+        name="hero[subText]"
+        value="<%= project.hero && project.hero.subText ? project.hero.subText : '' %>"
+        placeholder="Hero Sub Text"
+        class="w-full border p-2 rounded"
+      />
+
+      <input
+        id="heroImageInput"
+        name="hero[image]"
+        value="<%= project.hero && project.hero.image ? project.hero.image : '' %>"
+        placeholder="Hero Image URL (https://...)"
+        class="w-full border p-2 rounded preview-input"
+        data-purpose="hero"
+      />
+
+      <img id="heroPreview" src="<%= project.hero && project.hero.image ? project.hero.image : '' %>" alt="<%= project.name ? project.name + ' - hero image' : 'Hero image' %>" class="mt-2" style="max-width: 200px; border-radius: 4px; border: 1px solid #ccc; <%= project.hero && project.hero.image ? '' : 'display:none;' %>" />
+
+      <input
+        name="hero[rera]"
+        value="<%= project.hero && project.hero.rera ? project.hero.rera : '' %>"
+        placeholder="RERA Registration Number (e.g., PB/DLI/2023/12345)"
+        class="w-full border p-2 rounded"
+      />
+
+      <input
+        name="hero[possession]"
+        value="<%= project.hero && project.hero.possession ? project.hero.possession : '' %>"
+        placeholder="Possession Date/Status (e.g., Q2 2025 or 01-06-2025)"
+        class="w-full border p-2 rounded"
+      />
+
+      <!-- ABOUT -->
+      <h3 class="text-lg font-semibold mt-6">About Section</h3>
+
+      <input
+        name="about[title]"
+        value="<%= project.about && project.about.title ? project.about.title : '' %>"
+        placeholder="About Title"
+        class="w-full border p-2 rounded"
+      />
+
+<textarea
+  name="about[content]"
+  class="w-full border p-2 rounded"
+  placeholder="About Content"
+><%= project.about && project.about.content ? project.about.content : '' %></textarea>
+
+      <input
+        id="aboutImageInput"
+        name="about[image]"
+        value="<%= project.about && project.about.image ? project.about.image : '' %>"
+        placeholder="About Image URL (https://...)"
+        class="w-full border p-2 rounded preview-input"
+        data-purpose="about"
+      />
+
+      <img id="aboutPreview" src="<%= project.about && project.about.image ? project.about.image : '' %>" alt="<%= project.about && project.about.title ? project.about.title : (project.name ? project.name + ' - about image' : 'About image') %>" class="mt-2" style="max-width: 200px; border-radius: 4px; border: 1px solid #ccc; <%= project.about && project.about.image ? '' : 'display:none;' %>" />
+
+      <!-- GALLERY -->
+      <h3 class="text-lg font-semibold mt-6">Image Gallery</h3>
+
+      <div id="galleryContainer" class="space-y-3">
+        <% if (project.gallery && project.gallery.length) { %>
+          <% project.gallery.forEach((img, idx) => { %>
+            <div class="galleryItem flex gap-2" data-index="<%= idx + 1 %>">
+              <input name="gallery[]" value="<%= img %>" placeholder="Image URL (https://...)" class="flex-1 border p-2 rounded gallery-url preview-input" data-index="<%= idx + 1 %>" />
+              <button type="button" onclick="removeGallery(this)" class="bg-red-500 text-white px-2 py-1 rounded">Remove</button>
+              <img src="<%= img %>" alt="<%= project.name ? project.name + ' - gallery image ' + (idx + 1) : 'Gallery image ' + (idx + 1) %>" class="gallery-preview" style="max-width: 120px; border-radius: 4px; border: 1px solid #ccc;" />
+            </div>
+          <% }) %>
+        <% } else { %>
+          <div class="galleryItem flex gap-2" data-index="1">
+            <input name="gallery[]" placeholder="Image URL (https://...)" class="flex-1 border p-2 rounded gallery-url preview-input" data-index="1" />
+            <button type="button" onclick="removeGallery(this)" class="bg-red-500 text-white px-2 py-1 rounded">Remove</button>
+            <img src="" alt="Gallery image 1" class="gallery-preview" style="max-width: 120px; border-radius: 4px; border: 1px solid #ccc; display:none;" />
+          </div>
+        <% } %>
+      </div>
+      <button type="button" onclick="addGallery()" class="bg-green-600 text-white px-3 py-1 rounded mt-2">+ Add Image</button>
+
+      <script>
+        function addGallery() {
+          const container = document.getElementById('galleryContainer');
+          const idx = container.querySelectorAll('.galleryItem').length + 1;
+          const newItem = document.createElement('div');
+          newItem.className = 'galleryItem flex gap-2';
+          newItem.setAttribute('data-index', idx);
+          newItem.innerHTML = `
+            <input name="gallery[]" placeholder="Image URL (https://...)" class="flex-1 border p-2 rounded gallery-url preview-input" data-index="${idx}" />
+            <button type="button" onclick="removeGallery(this)" class="bg-red-500 text-white px-2 py-1 rounded">Remove</button>
+            <img src="" alt="Gallery image ${idx}" class="gallery-preview" style="max-width: 120px; border-radius: 4px; border: 1px solid #ccc; display:none;" />
+          `;
+          container.appendChild(newItem);
+
+          const input = newItem.querySelector('.gallery-url');
+          input.addEventListener('input', () => updatePreviewForInput(input));
+        }
+        
+        function removeGallery(btn) {
+          btn.parentElement.remove();
+        }
+        // --- Image preview helpers ---
+        function updatePreviewForInput(input) {
+          const idx = input.getAttribute('data-index');
+          const preview = input.closest('.galleryItem') ? input.closest('.galleryItem').querySelector('.gallery-preview') : null;
+          const projectName = document.getElementById('projectName')?.value || '';
+          const purpose = input.dataset.purpose || (preview ? 'gallery' : 'image');
+          if (input.value && preview) {
+            preview.src = input.value;
+            preview.alt = projectName ? projectName + ' - ' + purpose + ' image ' + (idx || '') : purpose + ' image ' + (idx || '');
+            preview.style.display = 'block';
+          } else if (preview) {
+            preview.src = '';
+            preview.alt = purpose + ' image ' + (idx || '');
+            preview.style.display = 'none';
+          }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+          // Attach listeners to existing gallery inputs
+          document.querySelectorAll('.gallery-url').forEach(input => {
+            input.addEventListener('input', () => updatePreviewForInput(input));
+            if (input.value) updatePreviewForInput(input);
+          });
+
+          // Attach listeners to other preview inputs
+          document.querySelectorAll('.preview-input').forEach(input => {
+            if (!input.classList.contains('gallery-url')) {
+              const preview = input.closest('div').querySelector('.image-preview') || document.getElementById((input.dataset.purpose || '') + 'Preview');
+              const update = () => {
+                const projectName = document.getElementById('projectName')?.value || '';
+                if (input.value && preview) {
+                  preview.src = input.value;
+                  preview.alt = projectName ? projectName + ' - ' + (input.dataset.purpose || 'image') + ' image' : (input.dataset.purpose || 'image') + ' image';
+                  preview.style.display = 'block';
+                } else if (preview) {
+                  preview.src = '';
+                  preview.alt = (input.dataset.purpose || 'image') + ' image';
+                  preview.style.display = 'none';
+                }
+              };
+              input.addEventListener('input', update);
+              if (input.value) update();
+            }
+          });
+
+          // Update preview alts when project name changes
+          const nameInput = document.getElementById('projectName');
+          if (nameInput) {
+            nameInput.addEventListener('input', () => {
+              const name = nameInput.value || '';
+              const hero = document.getElementById('heroPreview');
+              const about = document.getElementById('aboutPreview');
+              const og = document.getElementById('ogPreview');
+              if (hero) hero.alt = name ? name + ' - hero image' : 'Hero image';
+              if (about) about.alt = name ? name + ' - about image' : 'About image';
+              if (og) og.alt = name ? name + ' - og image' : 'OG image';
+              document.querySelectorAll('.gallery-preview').forEach((img, i) => {
+                img.alt = name ? name + ' - gallery image ' + (i + 1) : 'Gallery image ' + (i + 1);
+              });
+            });
+          }
+        });      </script>      <!-- AMENITIES -->
+      <h3 class="text-lg font-semibold mt-6">Amenities</h3>
+
+      <input
+        name="amenities"
+        value="<%= project.amenities && project.amenities.length ? project.amenities.join(', ') : '' %>"
+        placeholder="Clubhouse, Pool, Gym"
+        class="w-full border p-2 rounded"
+      />
+
+      <!-- FAQ -->
+      <h3 class="text-lg font-semibold mt-6">FAQs</h3>
+
+      <div id="faqContainer" class="space-y-3">
+        <% if (project.faqs && project.faqs.length) { %>
+          <% project.faqs.forEach(faq => { %>
+            <div class="faqItem flex gap-2">
+              <input name="faqQuestion[]" value="<%= faq.question %>" placeholder="FAQ Question" class="flex-1 border p-2 rounded" />
+              <input name="faqAnswer[]" value="<%= faq.answer %>" placeholder="FAQ Answer" class="flex-1 border p-2 rounded" />
+              <button type="button" onclick="removeFaq(this)" class="bg-red-500 text-white px-2 py-1 rounded">Remove</button>
+            </div>
+          <% }) %>
+        <% } else { %>
+          <div class="faqItem flex gap-2">
+            <input name="faqQuestion[]" placeholder="FAQ Question" class="flex-1 border p-2 rounded" />
+            <input name="faqAnswer[]" placeholder="FAQ Answer" class="flex-1 border p-2 rounded" />
+            <button type="button" onclick="removeFaq(this)" class="bg-red-500 text-white px-2 py-1 rounded">Remove</button>
+          </div>
+        <% } %>
+      </div>
+      <button type="button" onclick="addFaq()" class="bg-green-600 text-white px-3 py-1 rounded mt-2">+ Add FAQ</button>
+
+      <script>
+        function addFaq() {
+          const container = document.getElementById('faqContainer');
+          const newItem = document.createElement('div');
+          newItem.className = 'faqItem flex gap-2';
+          newItem.innerHTML = `
+            <input name="faqQuestion[]" placeholder="FAQ Question" class="flex-1 border p-2 rounded" />
+            <input name="faqAnswer[]" placeholder="FAQ Answer" class="flex-1 border p-2 rounded" />
+            <button type="button" onclick="removeFaq(this)" class="bg-red-500 text-white px-2 py-1 rounded">Remove</button>
+          `;
+          container.appendChild(newItem);
+        }
+        
+        function removeFaq(btn) {
+          btn.parentElement.remove();
+        }
+      </script>
+
+      <!-- SEO -->
+      <h3 class="text-lg font-semibold mt-6">SEO Settings</h3>
+
+      <input
+        name="metaTitle"
+        value="<%= project.metaTitle || '' %>"
+        placeholder="Meta Title"
+        class="w-full border p-2 rounded"
+      />
+
+<textarea
+  name="metaDescription"
+  class="w-full border p-2 rounded"
+  placeholder="Meta Description"
+><%= project.metaDescription || '' %></textarea>
+
+      <input
+        id="ogImageInput"
+        name="ogImage"
+        value="<%= project.ogImage || '' %>"
+        placeholder="OG Image URL"
+        class="w-full border p-2 rounded preview-input"
+        data-purpose="og"
+      />
+
+      <img id="ogPreview" src="<%= project.ogImage || '' %>" alt="<%= project.name ? project.name + ' - og image' : 'OG image' %>" class="mt-2" style="max-width: 200px; border-radius: 4px; border: 1px solid #ccc; <%= project.ogImage ? '' : 'display:none;' %>" />
+
+<textarea
+  name="schema"
+  class="w-full border p-2 rounded"
+  placeholder="Custom JSON-LD Schema"
+><%= project.schema || '' %></textarea>
+
+      <!-- ACTIONS -->
+      <div class="flex gap-3 pt-4">
+        <button
+          type="submit"
+          class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700"
+        >
+          Update Project
+        </button>
+
+        <a
+          href="/admin"
+          class="bg-gray-300 px-6 py-2 rounded hover:bg-gray-400"
+        >
+          Cancel
+        </a>
+      </div>
+    </form>
+  </body>
+</html>

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Edit Project</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="admin-page">
+
+<header class="flex-between px-6 py-4 bg-white shadow">
+  <h1 class="text-2xl font-bold">Edit Project</h1>
+  <a href="/admin" class="btn btn-gray">Back</a>
+</header>
+
+<div class="admin-container">
+  <div class="card mt-6" style="max-width: 800px;">
+    <form method="POST">
+      
+      <!-- Hero Section -->
+      <div class="card-header">
+        <h2>Hero Section</h2>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Hero Heading</label>
+        <input type="text" name="heroHeading" class="form-input" value="<%= project.hero?.heading || '' %>" required />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Hero Subtext</label>
+        <input type="text" name="heroSubText" class="form-input" value="<%= project.hero?.subText || '' %>" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Hero Image URL</label>
+        <input type="url" name="heroImage" class="form-input" value="<%= project.hero?.image || '' %>" />
+        <% if (project.hero?.image) { %>
+          <div class="mt-2">
+            <img src="<%= project.hero.image %>" alt="<%= project.name %> - hero image" style="max-width: 200px; border-radius: 4px; border: 1px solid #ccc;">
+          </div>
+        <% } %>
+      </div>
+
+      <div class="grid grid-2">
+        <div class="form-group">
+          <label class="form-label">RERA Registration</label>
+          <input type="text" name="heroRera" class="form-input" value="<%= project.hero?.rera || '' %>" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Possession</label>
+          <input type="text" name="heroPossession" class="form-input" value="<%= project.hero?.possession || '' %>" />
+        </div>
+      </div>
+
+      <!-- Project Info -->
+      <div class="card-header mt-6">
+        <h2>Project Info</h2>
+      </div>
+
+      <% if (typeof error !== 'undefined' && error) { %>
+        <div class="alert alert-error">
+          <%= error %>
+        </div>
+      <% } %>
+
+      <div class="form-group">
+        <label class="form-label">Project Name *</label>
+        <input id="projectName" type="text" name="name" class="form-input" value="<%= project.name %>" required />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Location *</label>
+        <input type="text" name="location" class="form-input" value="<%= project.location %>" required />
+      </div>
+
+      <div class="grid grid-2">
+        <div class="form-group">
+          <label class="form-label">Price</label>
+          <input type="text" name="price" class="form-input" value="<%= project.price || '' %>" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Land Size</label>
+          <input type="text" name="landSize" class="form-input" value="<%= project.landSize || '' %>" />
+        </div>
+      </div>
+
+      <!-- About Section -->
+      <div class="card-header mt-6">
+        <h2>About</h2>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">About Title</label>
+        <input type="text" name="aboutTitle" class="form-input" value="<%= project.about?.title || '' %>" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">About Content</label>
+        <textarea name="aboutContent" class="form-textarea"><%= project.about?.content || '' %></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">About Image URL</label>
+        <input type="url" name="aboutImage" class="form-input" value="<%= project.about?.image || '' %>" />
+        <% if (project.about?.image) { %>
+          <div class="mt-2">
+            <img src="<%= project.about.image %>" alt="<%= project.about?.title || (project.name + ' - about image') %>" style="max-width: 200px; border-radius: 4px; border: 1px solid #ccc;">
+          </div>
+        <% } %>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Connectivity Map Image URL</label>
+        <input type="url" name="connectivityMap" class="form-input" value="<%= project.connectivityMap || '' %>" />
+        <% if (project.connectivityMap) { %>
+          <div class="mt-2">
+            <img src="<%= project.connectivityMap %>" alt="<%= project.name %> - connectivity map" style="max-width: 200px; border-radius: 4px; border: 1px solid #ccc;">
+          </div>
+        <% } %>
+      </div>
+
+      <!-- Gallery -->
+      <div class="card-header mt-6">
+        <h2>Gallery Images</h2>
+      </div>
+
+      <div id="galleryContainer">
+        <% if (project.gallery && project.gallery.length > 0) { %>
+          <% project.gallery.forEach((img, idx) => { %>
+            <div class="form-group">
+              <label class="form-label">Gallery Image URL</label>
+              <div class="flex gap-2">
+                <input type="url" name="gallery[]" class="form-input" value="<%= img %>" />
+                <button type="button" class="btn btn-red btn-sm" onclick="removeGallery(this)">Remove</button>
+              </div>
+              <% if (img) { %>
+                <img class="existing-gallery-img" src="<%= img %>" alt="<%= project.name %> - gallery image <%= idx + 1 %>" style="max-width: 100px; margin-top: 8px; border-radius: 4px; border: 1px solid #ccc;">
+              <% } %>
+            </div>
+          <% }); %>
+        <% } %>
+      </div>
+
+      <button type="button" class="btn btn-gray mt-2" onclick="addGallery()">+ Add Image</button>
+
+      <!-- Amenities -->
+      <div class="card-header mt-6">
+        <h2>Amenities</h2>
+      </div>
+
+      <div id="amenitiesContainer">
+        <% if (project.amenities && project.amenities.length > 0) { %>
+          <% project.amenities.forEach(amenity => { %>
+            <div class="form-group">
+              <label class="form-label">Amenity</label>
+              <div class="flex gap-2">
+                <input type="text" name="amenities[]" class="form-input" value="<%= amenity %>" />
+                <button type="button" class="btn btn-red btn-sm" onclick="removeAmenity(this)">Remove</button>
+              </div>
+            </div>
+          <% }); %>
+        <% } %>
+      </div>
+
+      <button type="button" class="btn btn-gray mt-2" onclick="addAmenity()">+ Add Amenity</button>
+
+      <!-- FAQs -->
+      <div class="card-header mt-6">
+        <h2>FAQs</h2>
+      </div>
+
+      <div id="faqContainer">
+        <% if (project.faqs && project.faqs.length > 0) { %>
+          <% project.faqs.forEach(faq => { %>
+            <div class="form-group">
+              <label class="form-label">Question</label>
+              <input type="text" name="faqQuestion[]" class="form-input" value="<%= faq.question %>" />
+              
+              <label class="form-label mt-2">Answer</label>
+              <textarea name="faqAnswer[]" class="form-textarea"><%= faq.answer %></textarea>
+              
+              <button type="button" class="btn btn-red btn-sm mt-2" onclick="removeFaq(this)">Remove</button>
+            </div>
+          <% }); %>
+        <% } %>
+      </div>
+
+      <button type="button" class="btn btn-gray mt-2" onclick="addFaq()">+ Add FAQ</button>
+
+      <!-- SEO -->
+      <div class="card-header mt-6">
+        <h2>SEO</h2>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Meta Title</label>
+        <input type="text" name="metaTitle" class="form-input" value="<%= project.metaTitle || '' %>" />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">Meta Description</label>
+        <textarea name="metaDescription" class="form-textarea"><%= project.metaDescription || '' %></textarea>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">OG Image URL</label>
+        <input type="url" name="ogImage" class="form-input" value="<%= project.ogImage || '' %>" />
+      </div>
+
+      <!-- Submit -->
+      <div class="flex gap-3 mt-6">
+        <button type="submit" class="btn btn-primary">Update Project</button>
+        <a href="/admin" class="btn btn-gray">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+function addGallery() {
+  const container = document.getElementById('galleryContainer');
+  const div = document.createElement('div');
+  div.className = 'form-group';
+  div.innerHTML = `
+    <label class="form-label">Gallery Image URL</label>
+    <div class="flex gap-2">
+      <input type="url" name="gallery[]" class="form-input" placeholder="https://..." />
+      <button type="button" class="btn btn-red btn-sm" onclick="removeGallery(this)">Remove</button>
+    </div>
+  `;
+  container.appendChild(div);
+}
+
+function removeGallery(btn) {
+  btn.closest('.form-group').remove();
+}
+
+function addAmenity() {
+  const container = document.getElementById('amenitiesContainer');
+  const div = document.createElement('div');
+  div.className = 'form-group';
+  div.innerHTML = `
+    <label class="form-label">Amenity</label>
+    <div class="flex gap-2">
+      <input type="text" name="amenities[]" class="form-input" placeholder="e.g., Swimming Pool" />
+      <button type="button" class="btn btn-red btn-sm" onclick="removeAmenity(this)">Remove</button>
+    </div>
+  `;
+  container.appendChild(div);
+}
+
+function removeAmenity(btn) {
+  btn.closest('.form-group').remove();
+}
+
+function addFaq() {
+  const container = document.getElementById('faqContainer');
+  const div = document.createElement('div');
+  div.className = 'form-group';
+  div.innerHTML = `
+    <label class="form-label">Question</label>
+    <input type="text" name="faqQuestion[]" class="form-input" placeholder="Your question" />
+    
+    <label class="form-label mt-2">Answer</label>
+    <textarea name="faqAnswer[]" class="form-textarea" placeholder="Your answer"></textarea>
+    
+    <button type="button" class="btn btn-red btn-sm mt-2" onclick="removeFaq(this)">Remove</button>
+  `;
+  container.appendChild(div);
+}
+
+function removeFaq(btn) {
+  btn.closest('.form-group').remove();
+}
+
+// Update alt tags when project name changes
+document.addEventListener('DOMContentLoaded', () => {
+  const nameInput = document.getElementById('projectName');
+  const heroImg = document.getElementById('heroPreview');
+  const aboutImg = document.getElementById('aboutPreview');
+  const connImg = document.getElementById('connectivityPreview');
+  const galleryImgs = document.querySelectorAll('.existing-gallery-img');
+
+  const updateAlts = () => {
+    const name = nameInput?.value || '';
+    if (heroImg) heroImg.alt = name ? name + ' - hero image' : 'Hero image';
+    if (aboutImg) aboutImg.alt = name ? name + ' - about image' : 'About image';
+    if (connImg) connImg.alt = name ? name + ' - connectivity map' : 'Connectivity map';
+    galleryImgs.forEach((img, idx) => {
+      img.alt = name ? name + ' - gallery image ' + (idx + 1) : 'Gallery image ' + (idx + 1);
+    });
+  };
+
+  if (nameInput) {
+    nameInput.addEventListener('input', updateAlts);
+  }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title><%= project.metaTitle || project.name %></title>
+    <meta name="description" content="<%= project.metaDescription || project.name %>">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta property="og:title" content="<%= project.name %>">
+    <meta property="og:description" content="<%= project.metaDescription || project.name %>">
+    <% if (project.ogImage) { %>
+        <meta property="og:image" content="<%= project.ogImage %>">
+    <% } %>
+</head>
+
+<body class="flex-col min-h-screen bg-gray-50">
+
+<!-- HEADER -->
+<header class="bg-primary text-white shadow-lg">
+    <div class="container flex-between py-4">
+        <div>
+            <h1 class="text-3xl font-bold">Dwarka Expressway</h1>
+            <p class="text-sm" style="opacity: 0.9;">Premium Real Estate Projects</p>
+        </div>
+        <nav class="flex gap-6" style="align-items: center;">
+            <a href="/" style="color: white; text-decoration: none;">Home</a>
+            <a href="/projects" style="color: white; text-decoration: none;">Projects</a>
+            <a href="#contact" style="color: white; text-decoration: none;">Contact</a>
+        </nav>
+    </div>
+</header>
+
+<!-- MAIN CONTENT -->
+<main class="flex-grow container py-8">
+
+    <!-- HERO SECTION -->
+    <div class="card mb-8">
+        <% if (project.hero && project.hero.image) { %>
+            <img src="<%= project.hero.image %>" alt="<%= project.name %> - hero image" style="width: 100%; height: 400px; object-fit: cover; border-radius: 8px;">
+        <% } else { %>
+            <div style="width: 100%; height: 400px; background-color: #f3f4f6; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
+                <p class="text-gray-600">No image available</p>
+            </div>
+        <% } %>
+        
+        <div class="p-6">
+            <h1 class="text-3xl font-bold mb-2"><%= project.name %></h1>
+            <p class="text-gray-600"><%= project.location %></p>
+            
+            <div class="grid grid-3 gap-4 mt-6">
+                <div>
+                    <p class="text-sm" style="color: #6b7280;">PRICE</p>
+                    <p class="font-bold"><%= project.price || 'N/A' %></p>
+                </div>
+                <div>
+                    <p class="text-sm" style="color: #6b7280;">LAND SIZE</p>
+                    <p class="font-bold"><%= project.landSize || 'N/A' %></p>
+                </div>
+                <div>
+                    <p class="text-sm" style="color: #6b7280;">POSSESSION</p>
+                    <p class="font-bold"><%= project.hero?.possession || 'N/A' %></p>
+                </div>
+            </div>
+
+            <% if (project.hero?.rera) { %>
+                <div class="mt-4 p-3" style="background-color: #e0f2fe; border-left: 4px solid #0284c7; border-radius: 4px;">
+                    <p class="text-sm font-semibold">RERA Registration: <span style="color: #0284c7;"><%= project.hero.rera %></span></p>
+                </div>
+            <% } %>
+        </div>
+    </div>
+
+    <!-- ABOUT SECTION -->
+    <% if (project.about) { %>
+        <div class="card mb-8">
+            <div class="grid grid-2 gap-6">
+                <div>
+                    <h2 class="text-2xl font-bold mb-4"><%= project.about.title || 'About this Project' %></h2>
+                    <p class="text-gray-700 leading-relaxed"><%= project.about.content %></p>
+                </div>
+                <% if (project.about.image) { %>
+                    <img src="<%= project.about.image %>" alt="<%= project.about.title ? project.about.title : project.name + ' - about image' %>" style="width: 100%; height: 300px; object-fit: cover; border-radius: 8px;">
+                <% } %>
+            </div>
+        </div>
+    <% } %>
+
+    <!-- AMENITIES -->
+    <% include partials/amenity-icon %>
+    <% if (project.amenities && project.amenities.length > 0) { %>
+        <div class="card mb-8">
+            <h2 class="text-2xl font-bold mb-6">Amenities</h2>
+            <div class="grid grid-3 gap-4">
+                <% project.amenities.forEach(amenity => { %>
+                    <div style="padding: 16px; background-color: #f9fafb; border-radius: 8px; border: 1px solid #e5e7eb; text-align: center;">
+                        <i class="<%= amenityIcon(amenity) %>" style="font-size:20px; color: #0284c7; display:block; margin-bottom:8px;"></i>
+                        <p class="font-semibold" style="color: #1f2937;"><%= amenity %></p>
+                    </div>
+                <% }); %>
+            </div>
+        </div>
+    <% } %>
+
+    <!-- GALLERY -->
+    <% if (project.gallery && project.gallery.length > 0) { %>
+        <div class="card mb-8">
+            <h2 class="text-2xl font-bold mb-6">Gallery</h2>
+            <div class="gallery">
+                <% project.gallery.forEach((img, idx) => { %>
+                    <div class="gallery-item">
+                        <img src="<%= img %>" alt="<%= project.name %> - gallery image <%= idx + 1 %>">
+                    </div>
+                <% }); %>
+            </div>
+        </div>
+    <% } %>
+
+    <!-- FAQs -->
+    <% if (project.faqs && project.faqs.length > 0) { %>
+        <div class="card mb-8">
+            <h2 class="text-2xl font-bold mb-6">Frequently Asked Questions</h2>
+            <div id="faqList">
+                <% project.faqs.forEach((faq, index) => { %>
+                    <div class="faq-item">
+                        <div class="faq-question" onclick="toggleFaq(this)">
+                            <span><%= faq.question %></span>
+                            <span class="faq-toggle">▼</span>
+                        </div>
+                        <div class="faq-answer">
+                            <%= faq.answer %>
+                        </div>
+                    </div>
+                <% }); %>
+            </div>
+        </div>
+    <% } %>
+
+    <!-- CONTACT SECTION -->
+    <div class="card mb-8" id="contact">
+        <h2 class="text-2xl font-bold mb-4">Get in Touch</h2>
+        <div class="grid grid-2 gap-6">
+            <div>
+                <p class="text-gray-700">Interested in this project? Contact us for more information.</p>
+                <div class="mt-4">
+                    <p class="mb-2"><strong>Phone:</strong> +91-XXXXXXXXXX</p>
+                    <p class="mb-2"><strong>Email:</strong> info@dwarkaexpressway.com</p>
+                    <p><strong>Location:</strong> <%= project.location %></p>
+                </div>
+            </div>
+            <div>
+                <form style="background-color: #f9fafb; padding: 20px; border-radius: 8px; border: 1px solid #e5e7eb;">
+                    <div class="form-group">
+                        <label class="form-label">Your Name</label>
+                        <input type="text" class="form-input" placeholder="Your name" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Your Email</label>
+                        <input type="email" class="form-input" placeholder="Your email" />
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Message</label>
+                        <textarea class="form-textarea" placeholder="Your message"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-full">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<!-- FOOTER -->
+<footer style="background-color: #1f2937; color: white; padding: 40px 20px; margin-top: 60px;">
+    <div class="container">
+        <div class="grid grid-3 gap-8 mb-8">
+            <div>
+                <h3 class="font-bold mb-4">Dwarka Expressway</h3>
+                <p style="color: #d1d5db;">Premium real estate projects along Dwarka Expressway.</p>
+            </div>
+            <div>
+                <h3 class="font-bold mb-4">Quick Links</h3>
+                <ul style="list-style: none;">
+                    <li class="mb-2"><a href="/" style="color: var(--primary); text-decoration: none;">Home</a></li>
+                    <li class="mb-2"><a href="/projects" style="color: var(--primary); text-decoration: none;">Projects</a></li>
+                    <li><a href="#contact" style="color: var(--primary); text-decoration: none;">Contact</a></li>
+                </ul>
+            </div>
+            <div>
+                <h3 class="font-bold mb-4">Contact</h3>
+                <p style="color: #d1d5db; margin-bottom: 8px;">Phone: +91-XXXXXXXXXX</p>
+                <p style="color: #d1d5db;">Email: info@dwarkaexpressway.com</p>
+            </div>
+        </div>
+        <div style="border-top: 1px solid #374151; padding-top: 20px; text-align: center; color: #9ca3af;">
+            <p>&copy; 2024 Dwarka Expressway. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+function toggleFaq(element) {
+    const answer = element.nextElementSibling;
+    const toggle = element.querySelector('.faq-toggle');
+    answer.classList.toggle('active');
+    toggle.classList.toggle('active');
+}
+</script>
+
+</body>
+</html>
