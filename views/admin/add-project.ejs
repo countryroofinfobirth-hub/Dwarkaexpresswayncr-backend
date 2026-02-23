@@ -34,7 +34,9 @@
       <div class="form-group">
         <label class="form-label">Hero Image URL</label>
         <input type="url" name="heroImage" class="form-input preview-input" data-purpose="hero" placeholder="https://..." value="<%= typeof formData !== 'undefined' ? formData.heroImage || '' : '' %>" />
-        <img src="<%= typeof formData !== 'undefined' && formData.heroImage ? formData.heroImage : '' %>" alt="<%= typeof formData !== 'undefined' && formData.name ? formData.name + ' - hero image' : 'Hero image' %>" class="image-preview hero-preview" style="max-width: 200px; margin-top: 8px; border-radius: 4px; border: 1px solid #ccc; <%= typeof formData !== 'undefined' && formData.heroImage ? '' : 'display: none;' %>" />
+        <label class="form-label">Hero Image Alt</label>
+        <input type="text" name="heroImageAlt" class="form-input" placeholder="Hero image alt text" value="<%= typeof formData !== 'undefined' ? formData.heroImageAlt || '' : '' %>" />
+        <img src="<%= typeof formData !== 'undefined' && formData.heroImage ? formData.heroImage : '' %>" alt="<%= typeof formData !== 'undefined' && formData.heroImageAlt ? formData.heroImageAlt : (typeof formData !== 'undefined' && formData.name ? formData.name + ' - hero image' : 'Hero image') %>" class="image-preview hero-preview" style="max-width: 200px; margin-top: 8px; border-radius: 4px; border: 1px solid #ccc; <%= typeof formData !== 'undefined' && formData.heroImage ? '' : 'display: none;' %>" />
       </div>
 
       <div class="grid grid-2">
@@ -99,7 +101,9 @@
       <div class="form-group">
         <label class="form-label">About Image URL</label>
         <input type="url" name="aboutImage" class="form-input preview-input" data-purpose="about" placeholder="https://..." value="<%= typeof formData !== 'undefined' ? formData.aboutImage || '' : '' %>" />
-        <img src="<%= typeof formData !== 'undefined' && formData.aboutImage ? formData.aboutImage : '' %>" alt="<%= typeof formData !== 'undefined' && formData.aboutTitle ? formData.aboutTitle : (typeof formData !== 'undefined' && formData.name ? formData.name + ' - about image' : 'About image') %>" class="image-preview about-preview" style="max-width: 200px; margin-top: 8px; border-radius: 4px; border: 1px solid #ccc; <%= typeof formData !== 'undefined' && formData.aboutImage ? '' : 'display: none;' %>" />
+        <label class="form-label">About Image Alt</label>
+        <input type="text" name="aboutImageAlt" class="form-input" placeholder="About image alt text" value="<%= typeof formData !== 'undefined' ? formData.aboutImageAlt || '' : '' %>" />
+        <img src="<%= typeof formData !== 'undefined' && formData.aboutImage ? formData.aboutImage : '' %>" alt="<%= typeof formData !== 'undefined' && formData.aboutImageAlt ? formData.aboutImageAlt : (typeof formData !== 'undefined' && formData.aboutTitle ? formData.aboutTitle : (typeof formData !== 'undefined' && formData.name ? formData.name + ' - about image' : 'About image')) %>" class="image-preview about-preview" style="max-width: 200px; margin-top: 8px; border-radius: 4px; border: 1px solid #ccc; <%= typeof formData !== 'undefined' && formData.aboutImage ? '' : 'display: none;' %>" />
       </div>
 
       <!-- Gallery -->
@@ -111,10 +115,11 @@
         <div class="form-group" data-index="1">
           <label class="form-label">Gallery Image URL</label>
           <div class="flex gap-2">
-            <input type="url" name="gallery[]" class="form-input gallery-url" data-index="1" placeholder="https://..." value="<%= typeof formData !== 'undefined' && formData.gallery && formData.gallery.length ? formData.gallery[0] : '' %>" />
+            <input type="url" name="galleryUrl[]" class="form-input gallery-url" data-index="1" placeholder="https://..." value="<%= typeof formData !== 'undefined' && formData.gallery && formData.gallery.length ? formData.gallery[0]?.url : '' %>" />
+            <input type="text" name="galleryAlt[]" class="form-input" placeholder="Gallery image 1 alt text" value="<%= typeof formData !== 'undefined' && formData.gallery && formData.gallery.length ? formData.gallery[0]?.alt : '' %>" style="max-width: 200px;" />
             <button type="button" class="btn btn-red btn-sm" onclick="removeGallery(this)">Remove</button>
           </div>
-          <img src="<%= typeof formData !== 'undefined' && formData.gallery && formData.gallery.length ? formData.gallery[0] : '' %>" alt="<%= typeof formData !== 'undefined' && formData.name ? formData.name + ' - gallery image 1' : 'Gallery image 1' %>" class="gallery-preview" style="max-width: 100px; margin-top: 8px; border-radius: 4px; border: 1px solid #ccc; <%= typeof formData !== 'undefined' && formData.gallery && formData.gallery.length ? '' : 'display: none;' %>" />
+          <img src="<%= typeof formData !== 'undefined' && formData.gallery && formData.gallery.length ? formData.gallery[0]?.url : '' %>" alt="<%= typeof formData !== 'undefined' && formData.gallery && formData.gallery.length && formData.gallery[0]?.alt ? formData.gallery[0].alt : (typeof formData !== 'undefined' && formData.name ? formData.name + ' - gallery image 1' : 'Gallery image 1') %>" class="gallery-preview" style="max-width: 100px; margin-top: 8px; border-radius: 4px; border: 1px solid #ccc; <%= typeof formData !== 'undefined' && formData.gallery && formData.gallery.length ? '' : 'display: none;' %>" />
         </div>
       </div>
 
@@ -164,7 +169,9 @@
       <div class="form-group">
         <label class="form-label">Connectivity Map Image URL</label>
         <input type="url" name="connectivityMap" class="form-input preview-input" data-purpose="connectivity map" placeholder="https://..." value="<%= typeof formData !== 'undefined' ? formData.connectivityMap : '' %>" />
-        <img src="<%= typeof formData !== 'undefined' && formData.connectivityMap ? formData.connectivityMap : '' %>" alt="<%= typeof formData !== 'undefined' && formData.name ? formData.name + ' - connectivity map' : 'Connectivity map' %>" class="image-preview connectivity-preview" style="max-width: 200px; margin-top: 8px; border-radius: 4px; border: 1px solid #ccc; <%= typeof formData !== 'undefined' && formData.connectivityMap ? '' : 'display: none;' %>" />
+        <label class="form-label">Connectivity Map Alt</label>
+        <input type="text" name="connectivityMapAlt" class="form-input" placeholder="Connectivity map alt text" value="<%= typeof formData !== 'undefined' ? formData.connectivityMapAlt || '' : '' %>" />
+        <img src="<%= typeof formData !== 'undefined' && formData.connectivityMap ? formData.connectivityMap : '' %>" alt="<%= typeof formData !== 'undefined' && formData.connectivityMapAlt ? formData.connectivityMapAlt : (typeof formData !== 'undefined' && formData.name ? formData.name + ' - connectivity map' : 'Connectivity map') %>" class="image-preview connectivity-preview" style="max-width: 200px; margin-top: 8px; border-radius: 4px; border: 1px solid #ccc; <%= typeof formData !== 'undefined' && formData.connectivityMap ? '' : 'display: none;' %>" />
         <p class="form-note">Add an image URL showing the connectivity map (e.g., nearby roads and transport links).</p>
       </div>
 

@@ -15,6 +15,7 @@ const projectSchema = new mongoose.Schema(
       heading: String,
       subText: String,
       image: String, // URL to hero image
+      imageAlt: String, // Custom alt tag for hero image
       rera: String, // RERA Registration Number
       possession: String, // Possession date/status
     },
@@ -24,14 +25,21 @@ const projectSchema = new mongoose.Schema(
       title: String,
       content: String,
       image: String, // URL to about image
+      imageAlt: String, // Custom alt tag for about image
     },
 
     // CONNECTIVITY
     connectivityMap: String, // URL to connectivity map image
+    connectivityMapAlt: String, // Custom alt tag for connectivity map image
 
     // GALLERY
     gallery: {
-      type: [String], // Array of image URLs
+      type: [
+        {
+          url: String,
+          alt: String
+        }
+      ], // Array of image objects with url and alt
       default: [],
     },
 

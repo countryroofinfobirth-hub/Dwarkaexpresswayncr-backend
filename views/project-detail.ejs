@@ -37,7 +37,7 @@
     <!-- HERO SECTION -->
     <div class="card mb-8">
         <% if (project.hero && project.hero.image) { %>
-            <img src="<%= project.hero.image %>" alt="<%= project.name %> - hero image" style="width: 100%; height: 400px; object-fit: cover; border-radius: 8px;">
+            <img src="<%= project.hero.image %>" alt="<%= project.hero.imageAlt || (project.name + ' - hero image') %>" style="width: 100%; height: 400px; object-fit: cover; border-radius: 8px;">
         <% } else { %>
             <div style="width: 100%; height: 400px; background-color: #f3f4f6; display: flex; align-items: center; justify-content: center; border-radius: 8px;">
                 <p class="text-gray-600">No image available</p>
@@ -80,7 +80,7 @@
                     <p class="text-gray-700 leading-relaxed"><%= project.about.content %></p>
                 </div>
                 <% if (project.about.image) { %>
-                    <img src="<%= project.about.image %>" alt="<%= project.about.title ? project.about.title : project.name + ' - about image' %>" style="width: 100%; height: 300px; object-fit: cover; border-radius: 8px;">
+                    <img src="<%= project.about.image %>" alt="<%= project.about.imageAlt || (project.about.title ? project.about.title : project.name + ' - about image') %>" style="width: 100%; height: 300px; object-fit: cover; border-radius: 8px;">
                 <% } %>
             </div>
         </div>
@@ -107,9 +107,9 @@
         <div class="card mb-8">
             <h2 class="text-2xl font-bold mb-6">Gallery</h2>
             <div class="gallery">
-                <% project.gallery.forEach((img, idx) => { %>
+                <% project.gallery.forEach((imgObj, idx) => { %>
                     <div class="gallery-item">
-                        <img src="<%= img %>" alt="<%= project.name %> - gallery image <%= idx + 1 %>">
+                        <img src="<%= imgObj.url %>" alt="<%= imgObj.alt || (project.name + ' - gallery image ' + (idx + 1)) %>">
                     </div>
                 <% }); %>
             </div>

@@ -34,9 +34,11 @@
       <div class="form-group">
         <label class="form-label">Hero Image URL</label>
         <input type="url" name="heroImage" class="form-input" value="<%= project.hero?.image || '' %>" />
+        <label class="form-label">Hero Image Alt</label>
+        <input type="text" name="heroImageAlt" class="form-input" value="<%= project.hero?.imageAlt || '' %>" placeholder="Hero image alt text" />
         <% if (project.hero?.image) { %>
           <div class="mt-2">
-            <img src="<%= project.hero.image %>" alt="<%= project.name %> - hero image" style="max-width: 200px; border-radius: 4px; border: 1px solid #ccc;">
+            <img src="<%= project.hero.image %>" alt="<%= project.hero?.imageAlt || (project.name + ' - hero image') %>" style="max-width: 200px; border-radius: 4px; border: 1px solid #ccc;">
           </div>
         <% } %>
       </div>
@@ -102,9 +104,11 @@
       <div class="form-group">
         <label class="form-label">About Image URL</label>
         <input type="url" name="aboutImage" class="form-input" value="<%= project.about?.image || '' %>" />
+        <label class="form-label">About Image Alt</label>
+        <input type="text" name="aboutImageAlt" class="form-input" value="<%= project.about?.imageAlt || '' %>" placeholder="About image alt text" />
         <% if (project.about?.image) { %>
           <div class="mt-2">
-            <img src="<%= project.about.image %>" alt="<%= project.about?.title || (project.name + ' - about image') %>" style="max-width: 200px; border-radius: 4px; border: 1px solid #ccc;">
+            <img src="<%= project.about.image %>" alt="<%= project.about?.imageAlt || project.about?.title || (project.name + ' - about image') %>" style="max-width: 200px; border-radius: 4px; border: 1px solid #ccc;">
           </div>
         <% } %>
       </div>
@@ -112,9 +116,11 @@
       <div class="form-group">
         <label class="form-label">Connectivity Map Image URL</label>
         <input type="url" name="connectivityMap" class="form-input" value="<%= project.connectivityMap || '' %>" />
+        <label class="form-label">Connectivity Map Alt</label>
+        <input type="text" name="connectivityMapAlt" class="form-input" value="<%= project.connectivityMapAlt || '' %>" placeholder="Connectivity map alt text" />
         <% if (project.connectivityMap) { %>
           <div class="mt-2">
-            <img src="<%= project.connectivityMap %>" alt="<%= project.name %> - connectivity map" style="max-width: 200px; border-radius: 4px; border: 1px solid #ccc;">
+            <img src="<%= project.connectivityMap %>" alt="<%= project.connectivityMapAlt || (project.name + ' - connectivity map') %>" style="max-width: 200px; border-radius: 4px; border: 1px solid #ccc;">
           </div>
         <% } %>
       </div>
@@ -126,15 +132,16 @@
 
       <div id="galleryContainer">
         <% if (project.gallery && project.gallery.length > 0) { %>
-          <% project.gallery.forEach((img, idx) => { %>
+          <% project.gallery.forEach((imgObj, idx) => { %>
             <div class="form-group">
               <label class="form-label">Gallery Image URL</label>
               <div class="flex gap-2">
-                <input type="url" name="gallery[]" class="form-input" value="<%= img %>" />
+                <input type="url" name="galleryUrl[]" class="form-input" value="<%= imgObj?.url || '' %>" />
+                <input type="text" name="galleryAlt[]" class="form-input" value="<%= imgObj?.alt || '' %>" placeholder="Gallery image <%= idx + 1 %> alt text" style="max-width: 200px;" />
                 <button type="button" class="btn btn-red btn-sm" onclick="removeGallery(this)">Remove</button>
               </div>
-              <% if (img) { %>
-                <img class="existing-gallery-img" src="<%= img %>" alt="<%= project.name %> - gallery image <%= idx + 1 %>" style="max-width: 100px; margin-top: 8px; border-radius: 4px; border: 1px solid #ccc;">
+              <% if (imgObj?.url) { %>
+                <img class="existing-gallery-img" src="<%= imgObj.url %>" alt="<%= imgObj.alt || (project.name + ' - gallery image ' + (idx + 1)) %>" style="max-width: 100px; margin-top: 8px; border-radius: 4px; border: 1px solid #ccc;">
               <% } %>
             </div>
           <% }); %>

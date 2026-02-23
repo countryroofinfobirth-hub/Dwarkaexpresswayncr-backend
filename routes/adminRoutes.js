@@ -124,12 +124,20 @@ router.post("/add-project", adminAuth, async (req, res) => {
 
     console.log("Amenities count:", amenities.length);
 
-    // Handle gallery
+    // Handle gallery (with alt tags)
     let gallery = [];
-    const galleryInput = d.gallery || [];
-    const galleryArray = Array.isArray(galleryInput) ? galleryInput : (galleryInput ? [galleryInput] : []);
-    gallery = galleryArray.filter(img => img && String(img).trim()).map(img => String(img).trim());
-
+    const galleryUrlInput = d.galleryUrl || [];
+    const galleryAltInput = d.galleryAlt || [];
+    const galleryUrls = Array.isArray(galleryUrlInput) ? galleryUrlInput : (galleryUrlInput ? [galleryUrlInput] : []);
+    const galleryAlts = Array.isArray(galleryAltInput) ? galleryAltInput : (galleryAltInput ? [galleryAltInput] : []);
+    for (let i = 0; i < galleryUrls.length; i++) {
+      if (galleryUrls[i] && String(galleryUrls[i]).trim()) {
+        gallery.push({
+          url: String(galleryUrls[i]).trim(),
+          alt: galleryAlts[i] ? String(galleryAlts[i]).trim() : ''
+        });
+      }
+    }
     console.log("Gallery images count:", gallery.length);
 
     const projectData = {
@@ -142,6 +150,7 @@ router.post("/add-project", adminAuth, async (req, res) => {
         heading: (d.heroHeading || "").trim(),
         subText: (d.heroSubText || "").trim(),
         image: (d.heroImage || "").trim(),
+        imageAlt: (d.heroImageAlt || "").trim(),
         rera: (d.heroRera || "").trim(),
         possession: (d.heroPossession || "").trim(),
       },
@@ -150,6 +159,7 @@ router.post("/add-project", adminAuth, async (req, res) => {
         title: (d.aboutTitle || "").trim(),
         content: (d.aboutContent || "").trim(),
         image: (d.aboutImage || "").trim(),
+        imageAlt: (d.aboutImageAlt || "").trim(),
       },
 
       amenities,
@@ -157,6 +167,7 @@ router.post("/add-project", adminAuth, async (req, res) => {
       faqs,
 
       connectivityMap: (d.connectivityMap || "").trim(),
+      connectivityMapAlt: (d.connectivityMapAlt || "").trim(),
 
       metaTitle: (d.metaTitle || "").trim(),
       metaDescription: (d.metaDescription || "").trim(),
@@ -289,12 +300,20 @@ router.post("/edit/:id", adminAuth, async (req, res) => {
 
     console.log("Amenities count:", amenities.length);
 
-    // Handle gallery
+    // Handle gallery (with alt tags)
     let gallery = [];
-    const galleryInput = d.gallery || [];
-    const galleryArray = Array.isArray(galleryInput) ? galleryInput : (galleryInput ? [galleryInput] : []);
-    gallery = galleryArray.filter(img => img && String(img).trim()).map(img => String(img).trim());
-
+    const galleryUrlInput = d.galleryUrl || [];
+    const galleryAltInput = d.galleryAlt || [];
+    const galleryUrls = Array.isArray(galleryUrlInput) ? galleryUrlInput : (galleryUrlInput ? [galleryUrlInput] : []);
+    const galleryAlts = Array.isArray(galleryAltInput) ? galleryAltInput : (galleryAltInput ? [galleryAltInput] : []);
+    for (let i = 0; i < galleryUrls.length; i++) {
+      if (galleryUrls[i] && String(galleryUrls[i]).trim()) {
+        gallery.push({
+          url: String(galleryUrls[i]).trim(),
+          alt: galleryAlts[i] ? String(galleryAlts[i]).trim() : ''
+        });
+      }
+    }
     console.log("Gallery images count:", gallery.length);
 
     const updateData = {
@@ -307,6 +326,7 @@ router.post("/edit/:id", adminAuth, async (req, res) => {
         heading: (d.heroHeading || "").trim(),
         subText: (d.heroSubText || "").trim(),
         image: (d.heroImage || "").trim(),
+        imageAlt: (d.heroImageAlt || "").trim(),
         rera: (d.heroRera || "").trim(),
         possession: (d.heroPossession || "").trim(),
       },
@@ -315,6 +335,7 @@ router.post("/edit/:id", adminAuth, async (req, res) => {
         title: (d.aboutTitle || "").trim(),
         content: (d.aboutContent || "").trim(),
         image: (d.aboutImage || "").trim(),
+        imageAlt: (d.aboutImageAlt || "").trim(),
       },
 
       amenities,
@@ -322,6 +343,7 @@ router.post("/edit/:id", adminAuth, async (req, res) => {
       faqs,
 
       connectivityMap: (d.connectivityMap || "").trim(),
+      connectivityMapAlt: (d.connectivityMapAlt || "").trim(),
 
       metaTitle: (d.metaTitle || "").trim(),
       metaDescription: (d.metaDescription || "").trim(),
