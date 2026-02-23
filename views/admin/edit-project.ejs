@@ -16,7 +16,6 @@
   <div class="card mt-6" style="max-width: 800px;">
     <form method="POST">
       
-      <!-- Hero Section -->
       <div class="card-header">
         <h2>Hero Section</h2>
       </div>
@@ -33,14 +32,15 @@
 
       <div class="form-group">
         <label class="form-label">Hero Image URL</label>
-        <input type="url" name="heroImage" class="form-input" value="<%= project.hero?.image || '' %>" />
+        <input type="url" name="heroImage" class="form-input preview-input" data-purpose="hero" value="<%= project.hero?.image || '' %>" />
+        
         <label class="form-label">Hero Image Alt</label>
         <input type="text" name="heroImageAlt" class="form-input" value="<%= project.hero?.imageAlt || '' %>" placeholder="Hero image alt text" />
-        <% if (project.hero?.image) { %>
-          <div class="mt-2">
-            <img src="<%= project.hero.image %>" alt="<%= project.hero?.imageAlt || (project.name + ' - hero image') %>" style="max-width: 200px; border-radius: 4px; border: 1px solid #ccc;">
-          </div>
-        <% } %>
+        
+        <img src="<%= project.hero?.image || '' %>" 
+             alt="<%= project.hero?.imageAlt || (project.name + ' - hero image') %>" 
+             class="image-preview hero-preview" 
+             style="max-width: 200px; margin-top: 8px; border-radius: 4px; border: 1px solid #ccc; <%= project.hero?.image ? '' : 'display: none;' %>" />
       </div>
 
       <div class="grid grid-2">
@@ -54,7 +54,6 @@
         </div>
       </div>
 
-      <!-- Project Info -->
       <div class="card-header mt-6">
         <h2>Project Info</h2>
       </div>
@@ -86,7 +85,6 @@
         </div>
       </div>
 
-      <!-- About Section -->
       <div class="card-header mt-6">
         <h2>About</h2>
       </div>
@@ -103,29 +101,34 @@
 
       <div class="form-group">
         <label class="form-label">About Image URL</label>
-        <input type="url" name="aboutImage" class="form-input" value="<%= project.about?.image || '' %>" />
+        <input type="url" name="aboutImage" class="form-input preview-input" data-purpose="about" value="<%= project.about?.image || '' %>" />
+        
         <label class="form-label">About Image Alt</label>
         <input type="text" name="aboutImageAlt" class="form-input" value="<%= project.about?.imageAlt || '' %>" placeholder="About image alt text" />
-        <% if (project.about?.image) { %>
-          <div class="mt-2">
-            <img src="<%= project.about.image %>" alt="<%= project.about?.imageAlt || project.about?.title || (project.name + ' - about image') %>" style="max-width: 200px; border-radius: 4px; border: 1px solid #ccc;">
-          </div>
-        <% } %>
+        
+        <img src="<%= project.about?.image || '' %>" 
+             alt="<%= project.about?.imageAlt || (project.name + ' - about image') %>" 
+             class="image-preview about-preview" 
+             style="max-width: 200px; margin-top: 8px; border-radius: 4px; border: 1px solid #ccc; <%= project.about?.image ? '' : 'display: none;' %>" />
+      </div>
+
+      <div class="card-header mt-6">
+        <h2>Connectivity</h2>
       </div>
 
       <div class="form-group">
         <label class="form-label">Connectivity Map Image URL</label>
-        <input type="url" name="connectivityMap" class="form-input" value="<%= project.connectivityMap || '' %>" />
+        <input type="url" name="connectivityMap" class="form-input preview-input" data-purpose="connectivity map" value="<%= project.connectivityMap || '' %>" />
+        
         <label class="form-label">Connectivity Map Alt</label>
         <input type="text" name="connectivityMapAlt" class="form-input" value="<%= project.connectivityMapAlt || '' %>" placeholder="Connectivity map alt text" />
-        <% if (project.connectivityMap) { %>
-          <div class="mt-2">
-            <img src="<%= project.connectivityMap %>" alt="<%= project.connectivityMapAlt || (project.name + ' - connectivity map') %>" style="max-width: 200px; border-radius: 4px; border: 1px solid #ccc;">
-          </div>
-        <% } %>
+        
+        <img src="<%= project.connectivityMap || '' %>" 
+             alt="<%= project.connectivityMapAlt || (project.name + ' - connectivity map') %>" 
+             class="image-preview connectivity-preview" 
+             style="max-width: 200px; margin-top: 8px; border-radius: 4px; border: 1px solid #ccc; <%= project.connectivityMap ? '' : 'display: none;' %>" />
       </div>
 
-      <!-- Gallery -->
       <div class="card-header mt-6">
         <h2>Gallery Images</h2>
       </div>
@@ -133,16 +136,17 @@
       <div id="galleryContainer">
         <% if (project.gallery && project.gallery.length > 0) { %>
           <% project.gallery.forEach((imgObj, idx) => { %>
-            <div class="form-group">
+            <div class="form-group" data-index="<%= idx + 1 %>">
               <label class="form-label">Gallery Image URL</label>
               <div class="flex gap-2">
-                <input type="url" name="galleryUrl[]" class="form-input" value="<%= imgObj?.url || '' %>" />
+                <input type="url" name="galleryUrl[]" class="form-input gallery-url" data-index="<%= idx + 1 %>" value="<%= imgObj?.url || '' %>" />
                 <input type="text" name="galleryAlt[]" class="form-input" value="<%= imgObj?.alt || '' %>" placeholder="Gallery image <%= idx + 1 %> alt text" style="max-width: 200px;" />
                 <button type="button" class="btn btn-red btn-sm" onclick="removeGallery(this)">Remove</button>
               </div>
-              <% if (imgObj?.url) { %>
-                <img class="existing-gallery-img" src="<%= imgObj.url %>" alt="<%= imgObj.alt || (project.name + ' - gallery image ' + (idx + 1)) %>" style="max-width: 100px; margin-top: 8px; border-radius: 4px; border: 1px solid #ccc;">
-              <% } %>
+              <img src="<%= imgObj?.url || '' %>" 
+                   alt="<%= imgObj?.alt || (project.name + ' - gallery image ' + (idx + 1)) %>" 
+                   class="gallery-preview" 
+                   style="max-width: 100px; margin-top: 8px; border-radius: 4px; border: 1px solid #ccc; <%= imgObj?.url ? '' : 'display: none;' %>" />
             </div>
           <% }); %>
         <% } %>
@@ -150,7 +154,6 @@
 
       <button type="button" class="btn btn-gray mt-2" onclick="addGallery()">+ Add Image</button>
 
-      <!-- Amenities -->
       <div class="card-header mt-6">
         <h2>Amenities</h2>
       </div>
@@ -171,7 +174,6 @@
 
       <button type="button" class="btn btn-gray mt-2" onclick="addAmenity()">+ Add Amenity</button>
 
-      <!-- FAQs -->
       <div class="card-header mt-6">
         <h2>FAQs</h2>
       </div>
@@ -194,7 +196,6 @@
 
       <button type="button" class="btn btn-gray mt-2" onclick="addFaq()">+ Add FAQ</button>
 
-      <!-- SEO -->
       <div class="card-header mt-6">
         <h2>SEO</h2>
       </div>
@@ -211,10 +212,13 @@
 
       <div class="form-group">
         <label class="form-label">OG Image URL</label>
-        <input type="url" name="ogImage" class="form-input" value="<%= project.ogImage || '' %>" />
+        <input type="url" name="ogImage" class="form-input preview-input" data-purpose="og" value="<%= project.ogImage || '' %>" />
+        <img src="<%= project.ogImage || '' %>" 
+             alt="<%= project.name + ' - og image' %>" 
+             class="image-preview og-preview" 
+             style="max-width: 200px; margin-top: 8px; border-radius: 4px; border: 1px solid #ccc; <%= project.ogImage ? '' : 'display: none;' %>" />
       </div>
 
-      <!-- Submit -->
       <div class="flex gap-3 mt-6">
         <button type="submit" class="btn btn-primary">Update Project</button>
         <a href="/admin" class="btn btn-gray">Cancel</a>
@@ -224,18 +228,41 @@
 </div>
 
 <script>
+let galleryCount = document.querySelectorAll('.gallery-url').length || 0;
+
+function updatePreviewForInput(input) {
+  const idx = input.getAttribute('data-index');
+  const preview = input.closest('.form-group').querySelector('.gallery-preview');
+  const projectName = document.getElementById('projectName')?.value || 'Gallery image';
+  if (input.value && preview) {
+    preview.src = input.value;
+    preview.alt = projectName + ' - gallery image ' + idx;
+    preview.style.display = 'block';
+  } else if (preview) {
+    preview.src = '';
+    preview.style.display = 'none';
+  }
+}
+
 function addGallery() {
+  galleryCount += 1;
   const container = document.getElementById('galleryContainer');
   const div = document.createElement('div');
   div.className = 'form-group';
+  div.setAttribute('data-index', galleryCount);
   div.innerHTML = `
     <label class="form-label">Gallery Image URL</label>
     <div class="flex gap-2">
-      <input type="url" name="gallery[]" class="form-input" placeholder="https://..." />
+      <input type="url" name="galleryUrl[]" class="form-input gallery-url" data-index="${galleryCount}" placeholder="https://..." />
+      <input type="text" name="galleryAlt[]" class="form-input" placeholder="Gallery image ${galleryCount} alt text" style="max-width: 200px;" />
       <button type="button" class="btn btn-red btn-sm" onclick="removeGallery(this)">Remove</button>
     </div>
+    <img src="" alt="Gallery image ${galleryCount}" class="gallery-preview" style="max-width: 100px; margin-top: 8px; border-radius: 4px; border: 1px solid #ccc; display: none;" />
   `;
   container.appendChild(div);
+
+  const input = div.querySelector('.gallery-url');
+  input.addEventListener('input', () => updatePreviewForInput(input));
 }
 
 function removeGallery(btn) {
@@ -267,10 +294,8 @@ function addFaq() {
   div.innerHTML = `
     <label class="form-label">Question</label>
     <input type="text" name="faqQuestion[]" class="form-input" placeholder="Your question" />
-    
     <label class="form-label mt-2">Answer</label>
     <textarea name="faqAnswer[]" class="form-textarea" placeholder="Your answer"></textarea>
-    
     <button type="button" class="btn btn-red btn-sm mt-2" onclick="removeFaq(this)">Remove</button>
   `;
   container.appendChild(div);
@@ -280,26 +305,46 @@ function removeFaq(btn) {
   btn.closest('.form-group').remove();
 }
 
-// Update alt tags when project name changes
+// Initializers
 document.addEventListener('DOMContentLoaded', () => {
+  // Gallery Previews
+  document.querySelectorAll('.gallery-url').forEach(input => {
+    input.addEventListener('input', () => updatePreviewForInput(input));
+  });
+
+  // Main Image Previews (Hero, About, etc)
+  const previewInputs = document.querySelectorAll('.preview-input');
+  previewInputs.forEach(input => {
+    const preview = input.closest('.form-group').querySelector('.image-preview');
+    const purpose = input.dataset.purpose || 'image';
+    const update = () => {
+      const projectName = document.getElementById('projectName')?.value || '';
+      if (input.value && preview) {
+        preview.src = input.value;
+        preview.alt = (projectName ? projectName + ' - ' : '') + purpose + ' image';
+        preview.style.display = 'block';
+      } else if (preview) {
+        preview.style.display = 'none';
+      }
+    };
+    input.addEventListener('input', update);
+  });
+
+  // Project Name Change -> Update all ALTs
   const nameInput = document.getElementById('projectName');
-  const heroImg = document.getElementById('heroPreview');
-  const aboutImg = document.getElementById('aboutPreview');
-  const connImg = document.getElementById('connectivityPreview');
-  const galleryImgs = document.querySelectorAll('.existing-gallery-img');
-
-  const updateAlts = () => {
-    const name = nameInput?.value || '';
-    if (heroImg) heroImg.alt = name ? name + ' - hero image' : 'Hero image';
-    if (aboutImg) aboutImg.alt = name ? name + ' - about image' : 'About image';
-    if (connImg) connImg.alt = name ? name + ' - connectivity map' : 'Connectivity map';
-    galleryImgs.forEach((img, idx) => {
-      img.alt = name ? name + ' - gallery image ' + (idx + 1) : 'Gallery image ' + (idx + 1);
-    });
-  };
-
   if (nameInput) {
-    nameInput.addEventListener('input', updateAlts);
+    nameInput.addEventListener('input', () => {
+      document.querySelectorAll('.gallery-url').forEach(input => updatePreviewForInput(input));
+      document.querySelectorAll('.image-preview').forEach(preview => {
+        const group = preview.closest('.form-group');
+        const input = group.querySelector('.preview-input');
+        const purpose = input ? (input.dataset.purpose || 'image') : 'image';
+        const projectName = nameInput.value || '';
+        if (preview.src) {
+          preview.alt = (projectName ? projectName + ' - ' : '') + purpose + ' image';
+        }
+      });
+    });
   }
 });
 </script>
